@@ -11,6 +11,8 @@
 #include <limits.h>
 #include <fcntl.h>
 
+#define MAX_INPUT_SIZE 1024
+
 
 int largest_number(int a, int b, int c);
 
