@@ -1,46 +1,53 @@
-#include "shell.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
-#include <errno.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+#define MAX_INPUT_SIZE 1024
 
 /**
- * main - Entry point
+ * main - Entry Point
  *
- * Return: exit success if successful.
+ * Return: Always 0(Success)
  */
 
 int main(void)
 {
-char *line = NULL;
-size_t line_size = 0;
+char input[MAX_INPUT_SIZE];
+char *args[2];
+int status;
 
 while (1)
 {
-printf("$ ");
-if (getline(&line, &line_size, stdin) == -1)
+printf("> ");
+fgets(input, MAX_INPUT_SIZE, stdin);
+if (feof(stdin))
 {
-if (errno == 0)
+exit(0);
+}
+input[strcspn(input, "\n")] = '\0'; /* remove trailing newline */
+args[0] = input;
+args[1] = NULL;
+
+pid_t pid = fork();
+
+if (pid == 0)
 {
-
-printf("\n");
-break;
+execve(args[0], args, environ);
+fprintf(stderr, "Error: command not found.\n");
+exit(1);
 }
-perror("getline");
-exit(EXIT_FAILURE);
-}
-
-
-line[strcspn(line, "\n")] = '\0';
-
-
-if (execlp(line, line, NULL) == -1)
+else if (pid < 0)
 {
-fprintf(stderr, "Error: Command not found: %s\n", line);
+fprintf(stderr, "Error: fork failed.\n");
+exit(1);
+}
+else
+{
+wait(&status);
 }
 }
 
-free(line);
-exit(EXIT_SUCCESS);
+return (0);
 }
