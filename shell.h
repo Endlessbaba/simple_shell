@@ -14,8 +14,6 @@
 
 void print_name(char *name, void (*f)(char *));
 
-void greet(char *name);
-
 
 
 #endif
