@@ -1,5 +1,5 @@
-#ifndef _SHELL_H_
-#define _SHELL_H_
+#ifndef SHELL_H
+#define SHELL_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,9 +10,11 @@
 #include <sys/stat.h>
 #include <limits.h>
 #include <fcntl.h>
-#include <errno.h>
 
-void print_name(char *name, void (*f)(char *));
+
+int largest_number(int a, int b, int c);
+
+
 
 
 

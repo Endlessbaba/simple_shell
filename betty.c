@@ -1,15 +1,29 @@
-#include <stdio.h>
 #include "shell.h"
 
 /**
- * print_name - prints a name
- * @name: the array that stores the name
- * @f: a function pointer
- * Return: Nothing
+ * largest_number - returns the largest of 3 numbers
+ * @a: first integer
+ * @b: second integer
+ * @c: third integer
+ * Return: largest number
  */
 
-void print_name(char *name, void (*f)(char *))
+int largest_number(int a, int b, int c)
 {
-	if (name && f)
-		f(name);
+	int largest;
+
+	if (a >= b && a >= c)
+	{
+		largest = a;
+	}
+	else if (b >= a && b >= c)
+	{
+		largest = b;
+	}
+	else
+	{
+		largest = c;
+	}
+
+	return (largest);
 }
