@@ -5,48 +5,53 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-#define MAX_INPUT_SIZE 1024
+#define BUFSIZE 1024
 
 /**
- * main - Entry Point
+ * main - Entry point
  *
  * Return: Always 0(Success)
  */
 
 int main(void)
 {
-char input[MAX_INPUT_SIZE];
-char *args[2];
+char *prompt = "$ ";
+char input[BUFSIZE];
+char *argv[2];
 int status;
+pid_t pid = fork();
+char **environ;
 
 while (1)
 {
-printf("> ");
-fgets(input, MAX_INPUT_SIZE, stdin);
-if (feof(stdin))
+printf("%s", prompt);
+if (fgets(input, BUFSIZE, stdin) == NULL)
 {
+break;
+}
+input[strcspn(input, "\n")] = '\0';
+
+argv[0] = input;
+argv[1] = NULL;
+
+
+if (pid < 0)
+{
+perror("fork() failed");
+exit(1);
+}
+else if (pid == 0)
+{
+if (execve(argv[0], argv, environ) == -1)
+{
+perror("execve() failed");
+exit(1);
+}
 exit(0);
-}
-input[strcspn(input, "\n")] = '\0'; /* remove trailing newline */
-args[0] = input;
-args[1] = NULL;
-
-pid_t pid = fork();
-
-if (pid == 0)
-{
-execve(args[0], args, environ);
-fprintf(stderr, "Error: command not found.\n");
-exit(1);
-}
-else if (pid < 0)
-{
-fprintf(stderr, "Error: fork failed.\n");
-exit(1);
 }
 else
 {
-wait(&status);
+while(wait(&status) != pid)
 }
 }
 

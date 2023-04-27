@@ -12,12 +12,10 @@
 #include <fcntl.h>
 
 #define MAX_INPUT_SIZE 1024
-
+#define BUFSIZE 1024
 
 int largest_number(int a, int b, int c);
 
-int main(void);
-
-
+int main (void);
 
 #endif
